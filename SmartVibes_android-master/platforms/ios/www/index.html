@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!--
+	Description:
+
+	BLE example application that demonstrates how to read values
+	from the TI SensorTag.
+
+	Requirements:
+
+	See text in the app user interface.
+-->
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Smart Vibes</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+	<script src="cordova.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/ui/ui.js"></script>
+	<script src="libs/evothings/easyble/easyble.js"></script>
+	<script src="app.js"></script>
+
+</head>
+
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+	<header>
+		<img class="logotype" src="ui/images/smartvibes_logo.png" alt="SmartVibes" />
+
+		<button id="menu-button" tabindex="0" onclick="this.focus()">
+			<img src="ui/images/menu.svg" />
+		</button>
+
+		<menu>
+			<menuitem>
+				<a href="#">Demo</a>
+			</menuitem>
+
+			<menuitem>
+				<a href="#information">Info</a>
+			</menuitem>
+		</menu>
+	</header>
+
+	<h1>SmartVibes</h1>
+
+	<div id='d2' style="position:absolute; top:275px; left:15px; z-index:1">
+		<p id="info">Not Connected</p>
+
+		<button onclick="app.onStartButton()" class="blue">Start</button>
+		<button onclick="app.onStopButton()" class="red">Stop</button>
+	</div>
+		
+		<div id='d1' style="position:absolute; top:0px; left:0px; z-index:1">  
+			<canvas id="canvas" width="400" height="250"></canvas>
+			<div style="position:absolute; top:155px; left:300px; z-index:1">
+			<p id=legendx style="color:#005A9C;">X axis</p>
+			<p id=legendy style="color:#ff6347;">Y axis</p> <!-- red -->
+			<p id=legendz style="color:#E6A817;">Z axis</p>
+			</div>
+		</div>
+
+	<p class=result>RMS Acceleration</p>
+	<p id="arms"></p>
+
+	<section id='information'>
+
+		<h2>Info</h2>
+
+		<p>
+			This app charts accelerometer data from the Texas Instruments SensorTag
+			CC2650. A device with
+			support for Bluetooth 4.0 and Android 4.3+ or iOS 7+ is required.
+		</p>
+
+		<h2>How to use</h2>
+
+		<p>
+			Activate the SensorTag and tap the Connect button. If everything works
+			the tag is discovered and accelerometer data is plotted to the canvas.
+		</p>
+
+		<h2>Additional Info</h2>
+
+		<p>
+
+		</p>
+
+	</section>
+
+</body>
+
+</html>
