@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!--
+	Description:
+
+	BLE example application that demonstrates how to read values
+	from the TI SensorTag.
+
+	Requirements:
+
+	See text in the app user interface.
+-->
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Smart Vibes</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+	<script src="cordova.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/ui/ui.js"></script>
+	<script src="libs/evothings/easyble/easyble.js"></script>
+	<script src="app.js"></script>
+
+</head>
+
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+	<header>
+		<img class="logotype" src="ui/images/smartvibes_logo.png" alt="SmartVibes" />
+
+		<button id="menu-button" tabindex="0" onclick="this.focus()">
+			<img src="ui/images/menu.svg" />
+		</button>
+
+		<menu>
+			<menuitem>
+				<a href="#">Demo</a>
+			</menuitem>
+
+			<menuitem>
+				<a href="#information">Info</a>
+			</menuitem>
+            
+            <menuitem>
+                <a href="#history">History</a>
+		</menu>
+	</header>
+		
+		<div id='d1' style="position:absolute; top:0vh; left:0vw; z-index:1">  
+			<canvas id="canvas" width=770vw	height=500px></canvas>
+			<div style="position:absolute; top:20vh; left:70vw; z-index:1">
+			<p class=legend id=period>Sampling period (ms)</p>
+			<p class=legend id=zacc>Z acceleration (m/s<sup>2</sup>)</p>
+			<p class=legend id=legendx style="color:#005A9C;">X axis</p>
+			<p class=legend id=legendy style="color:#ff6347;">Y axis</p> <!-- red -->
+			<p class=legend id=legendz style="color:#E6A817;">Z axis</p>
+			</div>
+		</div>
+		<div id='d2' style="position:relative; top:40vh; left:5vw; z-index:0.2">
+			<p class=status id="info">Not Connected</p>
+		</div>
+		<div id='d3' style="position:absolute; top:85vh; left:3vw; z-index:0.2">
+			<button onclick="app.onStartButton()" class="blue">Start</button>
+			<button onclick="app.onPauseButton()" class="yellow">Pause</button>
+			<button onclick="app.onStopButton()" class="green">Stop</button>
+			<button onclick="app.onTareButton()" class="red">Taring</button>
+            
+		</div>
+		<div id='d4' style="position:absolute; top:25vh; left:5vw; z-index:1">
+			<p class=result>Cumulative RMS Accel. (m/s<sup>2</sup>)</p>
+			<p class=result id=arms>0.0</p>
+			<p class=result>Vibration Dose Value (m/s<sup>1.75</sup>)</p>
+			<p class=result id=vdv>0.0</p>
+			<p class=result>Crest Factor</p>
+			<p class=result id=cf>0.0</p>
+		</div>
+		<div id='d5' style="position:absolute; top:60vh; left:65vw; z-index:1">
+			<p class=risklevel>Overall Vibration Level</p>
+			<p class=risklevel id=risk>0.0</p>
+		</div>
+
+	<section id='information'>
+
+		<h2>Info</h2>
+
+		<p> <font size = "-1">
+			This app charts accelerometer data from the Texas Instruments SensorTag
+			CC2650. A device with
+			support for Bluetooth 4.0 and Android 4.3+ or iOS 7+ is required.
+		</font> </p> <br />
+
+		<h2>How to use</h2>
+
+		<p> <font size = "-1">
+        Activate the SensorTag and tap the Connect button. If the tag is discoverable and connected, the accelerometer data is plotted to the canvas. The following three factors: Cumulative RMS Acceleration, Vibrational Dose Value and Crest Factor are calculated which are then factored in to make the Overall Vibrational Level
+		</font> </p> <br />
+
+		<h2> Cumulative RMS Acceleration</h2>
+        
+		<p> <font size = "-1">
+        Cumulative RMS Acceleration is measured in m/s<sup>2</sup> and represents the weighted acceleration the sensor is experiencing across the period of time in which the start button is pressed.
+		</font> </p> <br />
+        
+        <h2> Vibrational Dose Value</h2>
+        
+        <p> <font size = "-1">
+        Vibrational Dose Value is measured in m/s<sup>2</sup> and represents the total exposure to vibrational experienced by the specific seat area over the time period. It combines the magnitude of vibration and the time for which it occurs. It is then scaled to be a cumulative measurement of the vibrational level received over an 8-hour or 16-hour period. For a standard operation in a motorized vehicle, the values should range between 0.025 - 10 m/s<sup>2</sup>
+        </font> </p> <br />
+        
+        <h2> Crest Factor</h2>
+        
+        <p> <font size = "-1">
+        Crest Factor is the peak amplitude of the waveform divided by the RMS acceleration metnioned above. A waveform is the graph of the instantaneous value of the signal plotted against time. The crest factor will indicate how extreme the peaks are in a waveform. A crest factor of 1 indicates a direct line or square wave.
+        </font> </p> <br />
+        
+        <h2> Overall Vibrational Level</h2>
+        
+        <p> <font size = "-1">
+        Overall Vibrational Level is calculated by taking the weighted components of Cumulative RMS Acceleration, Vibrational Dose Value and Crest Factor in order to output a value from 0-5. 0 being a Vibrational Level that is the lowest risk to the patient while 5 being the highest risk. The value of Overall Vibrational Level is relative with 1 being around the average risk value.
+        </font> </p>
+
+	</section>
+    
+    
+</body>
+
+</html>
